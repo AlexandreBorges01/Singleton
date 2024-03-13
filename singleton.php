@@ -14,7 +14,7 @@
        
     }
 
-    public function getInstance(){
+    public static function getInstance(){
 
       if (self::$instance == null){
         self::$instance = new DatabaseConnetion();
@@ -22,16 +22,21 @@
       return self::$instance;
     }
 
-    public function connection(){
+    public function connect(){
         try{
             self::$instance =  new PDO($this->dsn,$this->username,$this->password);
             
         }catch(PDOException $e){
-            
+          echo "Erro de conexão: " . $e->getMessage();
+          exit;
         }
     }
-    public function querry($querry){
-        $stmt = self::$instance;
+    public function query($query){
+      $stmt = self::$instance;
+      $stmt = $stmt->prepare($query);
+      
+      $stmt->execute();
+      return $stmt->fetchAll();
     }
  
 }
