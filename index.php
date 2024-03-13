@@ -4,6 +4,6 @@ $test = DatabaseConnetion::getInstance();
 
 $test->connect();
 
-$a = $test->query("Select test From teste");
+$a = $test->query("Select * From test");
 
 print_r($a);

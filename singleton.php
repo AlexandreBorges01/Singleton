@@ -1,9 +1,11 @@
 <?php
  class DatabaseConnetion{
+    private $pdo = null;
     private $dsn=  "mysql:host=localhost;dbname=teste";
     private  $username = "root";
     private $password = "";
     private $option = [];
+
 
 
     private static $instance = null;
@@ -23,17 +25,19 @@
     }
 
     public function connect(){
-        try{
-            self::$instance =  new PDO($this->dsn,$this->username,$this->password);
+      if(!isset($this->pdo)) {
+      try{
+        $this->pdo =  new PDO($this->dsn,$this->username,$this->password);
             
         }catch(PDOException $e){
           echo "Erro de conexão: " . $e->getMessage();
           exit;
         }
+      }
     }
+
     public function query($query){
-      $stmt = self::$instance;
-      $stmt = $stmt->prepare($query);
+      $stmt = $this->pdo->prepare($query);
       
       $stmt->execute();
       return $stmt->fetchAll();
